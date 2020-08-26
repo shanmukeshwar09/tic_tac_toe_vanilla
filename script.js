@@ -5,39 +5,39 @@ var gameBoard = [];
 
 CONSTANTS.RESTART.onclick = () => initGame();
 
-function initGame() {
+const initGame = () => {
   CONSTANTS.ALERT.style.display = "none";
   CONSTANTS.CHOOSER.style.display = "block";
   CONSTANTS.X.addEventListener("click", chooseVar);
   CONSTANTS.O.addEventListener("click", chooseVar);
-}
+};
 
-function startGame() {
+const startGame = () => {
   gameBoard = Array.from(Array(9).keys());
   for (let i = 0; i < 9; i++) {
     let tempDoc = document.getElementById(i);
     tempDoc.innerHTML = "";
     tempDoc.addEventListener("click", handleGesture);
   }
-}
+};
 
-function declareWinner(player) {
+const declareWinner = (player) => {
   CONSTANTS.GAME.style.display = "none";
   CONSTANTS.ALERT.style.display = "block";
   CONSTANTS.MESSAGE.innerHTML = player == human ? "You win" : "You Loose";
-}
+};
 
-function declareDraw() {
+const declareDraw = () => {
   CONSTANTS.GAME.style.display = "none";
   CONSTANTS.ALERT.style.display = "block";
   CONSTANTS.MESSAGE.innerHTML = "Draw Match";
-}
+};
 
-function getEmptySpotsForAi() {
+const getEmptySpotsForAi = () => {
   return gameBoard.filter((s) => typeof s === "number");
-}
+};
 
-function checkForWin(gameBoard, palyer) {
+const checkForWin = (gameBoard, palyer) => {
   let indexes = [];
   let result = false;
 
@@ -57,9 +57,9 @@ function checkForWin(gameBoard, palyer) {
     }
   }
   return result;
-}
+};
 
-function handleTurn(id, player) {
+const handleTurn = (id, player) => {
   document.getElementById(id).innerHTML = player;
   gameBoard[id] = player;
   let result = checkForWin(gameBoard, player);
@@ -68,9 +68,9 @@ function handleTurn(id, player) {
     return false;
   }
   return true;
-}
+};
 
-function handleGesture(cellID) {
+const handleGesture = (cellID) => {
   let id = cellID.target.id;
   if (typeof gameBoard[id] == "number") {
     let toPlay = handleTurn(id, human);
@@ -83,7 +83,7 @@ function handleGesture(cellID) {
       }
     }
   }
-}
+};
 
 const chooseVar = (varId) => {
   if (varId.target.id == "X") {
@@ -98,7 +98,7 @@ const chooseVar = (varId) => {
   startGame();
 };
 
-function minimax(newBoard, player) {
+const minimax = (newBoard, player) => {
   var availSpots = getEmptySpotsForAi();
 
   if (checkForWin(newBoard, human)) {
@@ -127,7 +127,7 @@ function minimax(newBoard, player) {
     moves.push(move);
   }
 
-  var bestMove;
+  let bestMove;
   if (player === ai) {
     var bestScore = -10000;
     for (var i = 0; i < moves.length; i++) {
@@ -137,7 +137,7 @@ function minimax(newBoard, player) {
       }
     }
   } else {
-    var bestScore = 10000;
+    let bestScore = 10000;
     for (var i = 0; i < moves.length; i++) {
       if (moves[i].score < bestScore) {
         bestScore = moves[i].score;
@@ -147,6 +147,6 @@ function minimax(newBoard, player) {
   }
 
   return moves[bestMove];
-}
+};
 
 initGame();
