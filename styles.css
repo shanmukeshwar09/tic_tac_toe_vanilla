@@ -15,9 +15,11 @@ body {
 }
 
 .container {
-  width: 70%;
+  display: flex;
+  align-items: center;
+  width: 90%;
   height: fit-content;
-  max-width: 500px;
+  max-width: 700px;
 }
 
 .card {
@@ -32,7 +34,7 @@ body {
 }
 
 .button-grid {
-  margin: 45px;
+  margin: 18px 9px;
 }
 
 .alert,
@@ -55,7 +57,10 @@ body {
 }
 
 .game {
-  display: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0px auto;
 }
 td {
   border: 3px solid rgba(0, 0, 0, 0.7);

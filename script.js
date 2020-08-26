@@ -5,39 +5,39 @@ var gameBoard = [];
 
 CONSTANTS.RESTART.onclick = () => initGame();
 
-const startGame = () => {
+function initGame() {
+  CONSTANTS.ALERT.style.display = "none";
+  CONSTANTS.CHOOSER.style.display = "block";
+  CONSTANTS.X.addEventListener("click", chooseVar);
+  CONSTANTS.O.addEventListener("click", chooseVar);
+}
+
+function startGame() {
   gameBoard = Array.from(Array(9).keys());
   for (let i = 0; i < 9; i++) {
     let tempDoc = document.getElementById(i);
     tempDoc.innerHTML = "";
     tempDoc.addEventListener("click", handleGesture);
   }
-};
+}
 
-const initGame = () => {
-  CONSTANTS.ALERT.style.display = "none";
-  CONSTANTS.CHOOSER.style.display = "block";
-  CONSTANTS.X.addEventListener("click", chooseVar);
-  CONSTANTS.O.addEventListener("click", chooseVar);
-};
-
-const declareWinner = (player) => {
+function declareWinner(player) {
   CONSTANTS.GAME.style.display = "none";
   CONSTANTS.ALERT.style.display = "block";
   CONSTANTS.MESSAGE.innerHTML = player == human ? "You win" : "You Loose";
-};
+}
 
-const declareDraw = () => {
+function declareDraw() {
   CONSTANTS.GAME.style.display = "none";
   CONSTANTS.ALERT.style.display = "block";
   CONSTANTS.MESSAGE.innerHTML = "Draw Match";
-};
+}
 
-const getEmptySpotsForAi = () => {
-  return gameBoard.filter((s) => typeof s == "number");
-};
+function getEmptySpotsForAi() {
+  return gameBoard.filter((s) => typeof s === "number");
+}
 
-const checkForWin = (gameBoard, palyer) => {
+function checkForWin(gameBoard, palyer) {
   let indexes = [];
   let result = false;
 
@@ -56,11 +56,10 @@ const checkForWin = (gameBoard, palyer) => {
       break;
     }
   }
-
   return result;
-};
+}
 
-const handleTurn = (id, player) => {
+function handleTurn(id, player) {
   document.getElementById(id).innerHTML = player;
   gameBoard[id] = player;
   let result = checkForWin(gameBoard, player);
@@ -69,9 +68,9 @@ const handleTurn = (id, player) => {
     return false;
   }
   return true;
-};
+}
 
-const handleGesture = (cellID) => {
+function handleGesture(cellID) {
   let id = cellID.target.id;
   if (typeof gameBoard[id] == "number") {
     let toPlay = handleTurn(id, human);
@@ -84,7 +83,7 @@ const handleGesture = (cellID) => {
       }
     }
   }
-};
+}
 
 const chooseVar = (varId) => {
   if (varId.target.id == "X") {
@@ -99,12 +98,12 @@ const chooseVar = (varId) => {
   startGame();
 };
 
-const minimax = (newBoard, player) => {
+function minimax(newBoard, player) {
   var availSpots = getEmptySpotsForAi();
 
-  if (checkForWin(newBoard, human).win) {
+  if (checkForWin(newBoard, human)) {
     return { score: -10 };
-  } else if (checkForWin(newBoard, ai).win) {
+  } else if (checkForWin(newBoard, ai)) {
     return { score: 10 };
   } else if (availSpots.length === 0) {
     return { score: 0 };
@@ -148,6 +147,6 @@ const minimax = (newBoard, player) => {
   }
 
   return moves[bestMove];
-};
+}
 
 initGame();
