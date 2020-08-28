@@ -33,8 +33,8 @@ const declareDraw = () => {
   CONSTANTS.MESSAGE.innerHTML = "Draw Match";
 };
 
-const getEmptySpotsForAi = () => {
-  return gameBoard.filter((s) => typeof s === "number");
+const getEmptySpotsForAi = (board) => {
+  return board.filter((s) => typeof s === "number");
 };
 
 const checkForWin = (gameBoard, palyer) => {
@@ -76,7 +76,7 @@ const handleGesture = (cellID) => {
     let toPlay = handleTurn(id, human);
 
     if (toPlay) {
-      if (getEmptySpotsForAi().length == 0) {
+      if (getEmptySpotsForAi(gameBoard).length == 0) {
         declareDraw();
       } else {
         handleTurn(minimax(gameBoard, ai).index, ai);
@@ -99,7 +99,7 @@ const chooseVar = (varId) => {
 };
 
 const minimax = (newBoard, player) => {
-  var availSpots = getEmptySpotsForAi();
+  var availSpots = getEmptySpotsForAi(newBoard);
 
   if (checkForWin(newBoard, human)) {
     return { score: -10 };
