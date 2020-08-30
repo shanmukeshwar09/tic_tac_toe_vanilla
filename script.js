@@ -12,12 +12,42 @@ const initGame = () => {
   CONSTANTS.O.addEventListener("click", chooseVar);
 };
 
+const chooseVar = (varId) => {
+  if (varId.target.id == "X") {
+    human = "X";
+    ai = "O";
+  } else {
+    human = "O";
+    ai = "X";
+  }
+  CONSTANTS.CHOOSER.style.display = "none";
+  CONSTANTS.GAME.style.display = "flex";
+  startGame();
+};
+
 const startGame = () => {
   gameBoard = Array.from(Array(9).keys());
   for (let i = 0; i < 9; i++) {
     let tempDoc = document.getElementById(i);
     tempDoc.innerHTML = "";
     tempDoc.addEventListener("click", handleGesture);
+  }
+};
+
+const handleGesture = (cellID) => {
+  let id = cellID.target.id;
+  if (typeof gameBoard[id] == "number") {
+    let toPlay = handleTurn(id, human);
+
+    if (toPlay) {
+      if (getEmptySpotsForAi(gameBoard).length == 0) {
+        declareDraw();
+      } else {
+        let aiIndex = minimax(gameBoard, ai).index;
+
+        handleTurn(aiIndex, ai);
+      }
+    }
   }
 };
 
@@ -70,36 +100,8 @@ const handleTurn = (id, player) => {
   return true;
 };
 
-const handleGesture = (cellID) => {
-  let id = cellID.target.id;
-  if (typeof gameBoard[id] == "number") {
-    let toPlay = handleTurn(id, human);
-
-    if (toPlay) {
-      if (getEmptySpotsForAi(gameBoard).length == 0) {
-        declareDraw();
-      } else {
-        handleTurn(minimax(gameBoard, ai).index, ai);
-      }
-    }
-  }
-};
-
-const chooseVar = (varId) => {
-  if (varId.target.id == "X") {
-    human = "X";
-    ai = "O";
-  } else {
-    human = "O";
-    ai = "X";
-  }
-  CONSTANTS.CHOOSER.style.display = "none";
-  CONSTANTS.GAME.style.display = "flex";
-  startGame();
-};
-
 const minimax = (newBoard, player) => {
-  var availSpots = getEmptySpotsForAi(newBoard);
+  let availSpots = getEmptySpotsForAi(newBoard);
 
   if (checkForWin(newBoard, human)) {
     return { score: -10 };
@@ -113,7 +115,6 @@ const minimax = (newBoard, player) => {
     var move = {};
     move.index = newBoard[availSpots[i]];
     newBoard[availSpots[i]] = player;
-
     if (player == ai) {
       var result = minimax(newBoard, human);
       move.score = result.score;
